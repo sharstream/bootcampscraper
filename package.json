@@ -1,0 +1,29 @@
+{
+  "name": "cnnscrapper",
+  "version": "1.0.0",
+  "description": "Web scraper",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharstream/cnnscrapper.git"
+  },
+  "author": "David Perez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sharstream/cnnscrapper/issues"
+  },
+  "homepage": "https://github.com/sharstream/cnnscrapper#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "cli-table": "^0.3.1",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^5.1.4",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
