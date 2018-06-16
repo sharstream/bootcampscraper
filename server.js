@@ -2,8 +2,27 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const Table = require('cli-table');
 const express = require('express');
+const logger = require("morgan");
+const bodyParser = require("body-parser");
 
+// Require all models
+var db = require("./models/Leader");
+var PORT = process.env.PORT || 3000;
 var app = express();
+
+// Use morgan logger for logging requests
+app.use(logger("dev"));
+// Use body-parser for handling form submissions
+app.use(bodyParser.urlencoded({ extended: true }));
+// Use express.static to serve the public folder as a static directory
+app.use(express.static("public"));
+//set jade engine template
+app.set('view engine', 'pug')
+var mongoose = require("mongoose");
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/week18Populater");
+// Connect routes api
+require('./routes/api-leader-routes')(app);
 
 let users = [];
 let table = new Table({
@@ -16,26 +35,38 @@ const options = {
     json: true
 }
 
-request(options)
-    .then( data => {
-        let user_data = [];
-        for(let user of data.directory_items){
-            user_data.push({name: user.user.username, likes_received: user.likes_received});
-        }
+    app.get('/scraper', (req, res) => {
+        request(options)
+        .then(data => {
+            let user_data = [];
+            for (let user of data.directory_items) {
+                user_data.push({
+                    name: user.user.username,
+                    likes_received: user.likes_received
+                });
+            }
 
-        process.stdout.write('loading');
-        getArticles(user_data);
-    })
-    .catch(err => {
-        console.log(err);
+            process.stdout.write('loading');
+            getArticles(user_data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
+app.get('/leaders', (req, res) => {
+    console.log('users: ' + users);
+    res.render("bootcamp", {
+        leaders: users
     });
+});
 
-function getArticles(user_data){
+function getArticles(list){
     var i = 0;
     function next(){
-        if (i < user_data.length) {
+        if (i < list.length) {
             var options = {
-                url: `https://forum.freecodecamp.org/u/` + user_data[i].name,
+                url: `https://forum.freecodecamp.org/u/` + list[i].name,
                 transform: body => cheerio.load(body)
             }
 
@@ -44,7 +75,21 @@ function getArticles(user_data){
                     process.stdout.write(`.`);
                     const fccAcc = $('h1.landing-heading').lenght == 0;
                     const challengers = fccAcc ? $('tbody tr').length : 'unknwon';
-                    table.push([user_data[i].name, user_data[i].likes_received, challengers]);
+                    user = {
+                        username: list[i].name,
+                        likes_received: list[i].likes_received,
+                        challengers: list[i].challengers,
+                        created_at: Date.now()
+                    }
+                    users.push(user);
+                    table.push([list[i].name, list[i].likes_received, challengers]);
+                    // db.Leader.create(list[i])
+                    //     .then(function (dbLeader) {
+                    //         console.log(dbLeader);
+                    //     })
+                    //     .catch(function (err) {
+                    //         return res.json(err);
+                    //     })
                     ++i;
                     return next();
                 })
@@ -55,9 +100,11 @@ function getArticles(user_data){
     return next();
 }
 
-function printData() {
+function printData( ) {
     console.log("☑️");
     console.log(table.toString());
 }
 
-require('./routes/api-articles-routes')(app);
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+});

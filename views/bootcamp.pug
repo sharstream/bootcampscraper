@@ -1,0 +1,23 @@
+
+block body
+
+    script(src="/public/js/sorttable.js")
+
+    h1.text-center Leaders
+
+    if leaders
+        table.table.sortable
+            thead.thead-dark
+                tr
+                    //- td Select
+                    td Username #
+                    td Likes received
+                    td Challengers?
+                    td CreatedDate
+            tbody
+                each user in leaders
+                    tr
+                        td #{user.username}
+                        td #{user.likes_received}
+                        td #{user.challengers}
+                        td #{new Date(user.created_at).toLocaleDateString("en-US", { hour12: false, year: "numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit" })}

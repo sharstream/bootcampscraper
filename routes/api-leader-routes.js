@@ -1,4 +1,8 @@
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 var mongojs = require("mongojs");
+
+require("../config/connection")(mongoose);
 
 module.exports = function(app) {
     // Database configuration
@@ -17,7 +21,8 @@ module.exports = function(app) {
     // Routes
     // 1. At the root path, send a simple hello cnn message to the browser
     app.get("/", function (req, res) {
-        res.send("Hello CNN");
+        res.render('index', { title: 'Hey', message: 'Hello bootcamp!' })
+        // res.send("Hello CNN");
     });
 
     // 2. At the "/all" path, display every entry in the article collection

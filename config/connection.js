@@ -1,8 +1,9 @@
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-const mongoose = require('mongoose');
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+module.exports = function(mongoose){
+    var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/bootcamp";
 
-// Set mongoose to leverage built in JavaScript ES6 Promises
-// Connect to the Mongo DB
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI);
+    // Set mongoose to leverage built in JavaScript ES6 Promises
+    // Connect to the Mongo DB
+    mongoose.Promise = Promise;
+    mongoose.connect(MONGODB_URI);
+}

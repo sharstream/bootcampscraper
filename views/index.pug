@@ -1,0 +1,34 @@
+doctype html
+html(lang='en')
+	head
+		meta(charset='UTF-8')
+		title Bootcamps Leaders Board
+		// Latest compiled and minified CSS
+		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+		link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+	body
+		.container
+			.jumbotron
+				h1.text-center
+					span.fa.fa-fire
+					|  Bootcamps Leaders Board
+				hr
+				h2.text-center User can filter bootcamp leaders board, you have two options below:
+				br
+				.text-center
+					a(href='/scraper')
+						button.btn.btn-lg.btn-primary
+							span.fa.fa-list-alt
+							|  Scraper
+					a(href='/leaders')
+						button.btn.btn-lg.btn-danger
+							span.fa.fa-credit-card
+							|  Display Board
+			footer.footer
+				.container
+					p
+						a(href='/api/tables') API Table Link
+						|
+						a(href='/api/waitlist') API Wait List
+						|
+						a(href='https://github.com/afhaque/HotRestaurant') GitHub Repo
